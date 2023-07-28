@@ -4,3 +4,5 @@ tick003, ev002, chahine, 20230728, 0
 tick004, ev003, Ali, 20230728, 0
 tick005, ev002, Mohammad, 20230728, 0
 tick006, ev006, fatima, 20230728, 0
+tick007, ev008, husam, 20230729, 0
+tick008, ev002, charbel, 20230729, 0

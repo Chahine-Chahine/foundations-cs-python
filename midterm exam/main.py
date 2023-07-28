@@ -26,6 +26,8 @@ def saveTickets(file_path, tickets):
 
 def addTicket(tickets, event_id, username, current_date):
     ticket_id = f"tick{str(len(tickets) + 1).zfill(3)}"
+    # Convert the current_date to a datetime object
+    current_date = datetime.datetime.strptime(current_date, '%Y%m%d')
     new_ticket = {
         'ticket_id': ticket_id,
         'event_id': event_id,
@@ -35,6 +37,7 @@ def addTicket(tickets, event_id, username, current_date):
     }
     tickets.append(new_ticket)
     print("Ticket booked successfully!")
+
 
 # Function to find the event with the highest number of tickets
 def findMostBooked(tickets):
@@ -63,10 +66,11 @@ def userMenu(tickets):
         choice = int(input("Enter your choice: "))
         if choice == 1:
             event_id = input("Enter the event id: ")
-            current_date = datetime.datetime.now()
+            current_date = input("Input the date of the event in yyyymmdd format: ")
             addTicket(tickets, event_id, username, current_date)
         elif choice == 2:
             saveTickets("tickets.txt", tickets)  # Save tickets before exiting
+            print("saving...")
             print("Exiting Program...")
             break
         else:
