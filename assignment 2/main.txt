@@ -1,0 +1,111 @@
+#Question 1
+s= str(input("Enter a string: "))
+i = int(input("Enter how many times you'd like to concatenate: "))
+def reverseAndConcatenate(s,i):
+    # Slicing notation: [start:end:step]
+    # When start and end are not specified, they default to the beginning and end of the string
+    # Step is set to -1 to traverse the string in reverse order
+    reversed_string = s[::-1]
+
+    # Concatenating the reversed string to itself i times
+    concatenated_string = reversed_string * i
+
+    # Returning the concatenated string
+    return concatenated_string
+
+print(reverseAndConcatenate(s,i))
+print("____________________________________________________________")
+#Question 2
+s = input("Enter a string with upper and lower case letters: ")
+
+def upperFirst(s):
+    upper_string = ''
+    lower_string = ''
+    for i in s:
+        if i.isupper():
+            upper_string += i
+        else:
+            lower_string += i
+
+    return upper_string + lower_string
+
+print(upperFirst(s))
+print("____________________________________________________________")
+#Question 3
+s1 = input("Enter the first string: ")
+s2 = input("Enter the second string: ")
+
+def validateReordering(s1, s2):
+    s1_list = list(s1)
+    s2_list = list(s2)
+
+    s1_list.sort()
+    s2_list.sort()
+
+    return s1_list == s2_list
+
+print(validateReordering(s1, s2))
+print("____________________________________________________________")
+#Question 4
+l = [8, 9, 6, 5, 3, 8, 4, 1, 100, 112, 116, 280]
+
+def find_highest_number(l):
+    max_value = l[0]
+    max_index = 0
+
+    for i in range(1, len(l)):
+        if l[i] > max_value:
+            max_value = l[i]
+            max_index = i
+
+    return f"The highest value in the list is {max_value} at index {max_index}"
+
+def find_lowest_number(l):
+    min_value = l[0]
+    min_index = 0
+
+    for i in range(1, len(l)):
+        if l[i] < min_value:
+            min_value = l[i]
+            min_index = i
+
+    return f"The lowest value in the list is {min_value} at index {min_index}"
+
+print(find_highest_number(l))
+print(find_lowest_number(l))
+
+print("____________________________________________________________")
+#Question 5
+n= int(input("Enter number degit(s): "))
+def sumDegits(n):
+  if n < 10:
+   return n
+  else:
+    return n % 10 + sumDegits(n // 10)
+
+print(sumDegits(n))
+
+print("____________________________________________________________")
+#Question 6
+s = str(input("Enter a string: "))
+def removeDuplicate(s):
+  #base case
+  if len(s) < 2 :
+    return s
+  elif s[0] == s[1]:
+    return removeDuplicate(s[1:])
+  else:
+    return s[0] + removeDuplicate(s[1:])
+  
+print(removeDuplicate(s))
+
+print("____________________________________________________________")
+#Optional Question 7
+n = int(input("Enter your number here: "))
+def reverseInteger(n):
+  if n < 10:
+    return n
+  else:
+    return f"{n%10}{reverseInteger(n // 10)}"
+
+print(reverseInteger(n))

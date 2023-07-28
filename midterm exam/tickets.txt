@@ -1,0 +1,6 @@
+tick101, ev003, fred, 20230802, 0
+tick102, ev002, gio, 20230803, 2
+tick003, ev002, chahine, 20230728, 0
+tick004, ev003, Ali, 20230728, 0
+tick005, ev002, Mohammad, 20230728, 0
+tick006, ev006, fatima, 20230728, 0
