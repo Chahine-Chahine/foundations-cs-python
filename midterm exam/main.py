@@ -281,7 +281,7 @@ def adminMenu(tickets): #O(n), where n is the number of user interactions.
               
                 elif choice == 7:
                     print("Exiting Program...")
-                    
+                    return False 
                 else:
                     print("Invalid choice. Please try again.")
 
