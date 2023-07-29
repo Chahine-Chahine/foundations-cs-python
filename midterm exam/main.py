@@ -18,12 +18,16 @@ def readTickets(file_path): #worst case =>O(n), where n is the number of lines i
             tickets.append(ticket)
     return tickets
 
-# Function to add a new ticket to the system
+
+# Function to save a new ticket to the system
 def saveTickets(file_path, tickets):# O(n), where n is the number of tickets
     with open(file_path, 'w') as file: #'w', is the mode for writing while 'r' is for reading
         for ticket in tickets:
             file.write(f"{ticket['ticket_id']}, {ticket['event_id']}, {ticket['username']}, {ticket['timestamp'].strftime('%Y%m%d')}, {ticket['priority']}\n")
 
+
+
+# Function to add a new ticket to the system
 def addTicket(tickets, event_id, username, current_date): #O(1)
     ticket_id = f"tick{str(len(tickets) + 1).zfill(3)}"
     # Convert the current_date to a datetime object
@@ -38,6 +42,9 @@ def addTicket(tickets, event_id, username, current_date): #O(1)
     tickets.append(new_ticket)
     print("Ticket booked successfully!")
 
+
+
+# Function to add a new ticket to the system for admin with extra control
 def adminAddTicket(tickets, event_id, username, current_date, priority):# O(1)
     ticket_id = f"tick{str(len(tickets) + 1).zfill(3)}"
     current_date = datetime.datetime.strptime(current_date, '%Y%m%d')
@@ -50,6 +57,23 @@ def adminAddTicket(tickets, event_id, username, current_date, priority):# O(1)
     }
     tickets.append(new_ticket)
     print("Ticket booked successfully!")
+
+
+
+
+#remove ticket form the list tickets through ticket_id
+#The remove() method removes the first matching element (which is passed as an argument) from the list
+#https://www.programiz.com/python-programming/methods/list/remove
+def removeTicket(tickets, ticket_id):
+    for ticket in tickets:
+        if ticket['ticket_id'] == ticket_id:
+            tickets.remove(ticket)
+            print(f"Ticket ID {ticket_id} removed from the system.")
+            return True
+    return False
+
+
+
 
 # Function to find the event with the highest number of tickets
 def findMostBooked(tickets): # O(n), where n is the number of tickets
@@ -67,6 +91,9 @@ def findMostBooked(tickets): # O(n), where n is the number of tickets
     most_booked_event = max(events, key=events.get)
     return most_booked_event
 
+
+
+# Insertion Sort function implimentation 
 def insertionSort(tickets): #O(n^2), where n is the number of tickets
     for i in range(1, len(tickets)): #o(n)
         key = tickets[i]
@@ -77,6 +104,48 @@ def insertionSort(tickets): #O(n^2), where n is the number of tickets
         tickets[j + 1] = key
 
 
+# Function that checks if a ticket exists and returns a boolean either true or false
+def checkForTicket(tickets, ticket_id):
+    for ticket in tickets:
+        if ticket['ticket_id'] == ticket_id:
+            return True
+
+    return False
+
+# Function that gets the priority
+def getPriority(ticket):
+    return ticket['priority']
+
+
+# Function that display then remove the events of today's date
+def displayAndRemove(tickets):
+    today_date = datetime.datetime.today().date()
+    today_events = []
+
+    for ticket in tickets:
+        if ticket['timestamp'].date() == today_date:
+            today_events.append(ticket)
+
+    if not today_events:
+        print("No events found today.")
+    else:
+        today_events.sort(key=getPriority)
+        print("\nToday's Events Sorted by Priority:")
+        for event in today_events:
+            print(f"Event ID: {event['event_id']}")
+            print(f"Username: {event['username']}")
+            print(f"Priority: {event['priority']}")
+            print(f"Event Date: {event['timestamp'].strftime('%Y%m%d')}")
+            print(f"Ticket ID: {event['ticket_id']}\n")
+
+        for event in today_events:
+            tickets.remove(event)
+
+    return tickets
+
+
+
+# User Menue to display for User
 def userMenu(tickets): #O(n), where n is the number of user interactions.
     username = input("Username: ")
     password = input("Password: ")
@@ -98,6 +167,8 @@ def userMenu(tickets): #O(n), where n is the number of user interactions.
         else:
             print("Invalid choice. Please try again.")
 
+
+# Admin Menue to display for Admin
 def adminMenu(tickets): #O(n), where n is the number of user interactions.
     attempts = 0
     while attempts < 5:
@@ -117,12 +188,16 @@ def adminMenu(tickets): #O(n), where n is the number of user interactions.
                 print("7. Exit")
 
                 choice = int(input("Enter your choice: "))
+
+              
                 if choice == 1:
                     most_booked_event = findMostBooked(tickets)
                     if most_booked_event is not None:
                         print(f"Event ID with the highest number of tickets: {most_booked_event}")
                     else:
                         print("No tickets available.")
+
+              
                 elif choice == 2:
                     event_id = input("Insert event ID: ")
                     username = input("username for the ticket booking: ")
@@ -130,15 +205,15 @@ def adminMenu(tickets): #O(n), where n is the number of user interactions.
                     priority = int(input("Enter priority number: "))
                     adminAddTicket(tickets, event_id, username, current_date, priority)
                     save = input("Do you wish to save? (write y if yes n for no)")
-                    if save == "y":
+                    if save.lower() == "y":
                        saveTickets("tickets.txt", tickets)  # Save tickets before exiting
                        print("saving...")
-                    elif save == "n":
+                    elif save.lower() == "n":
                       print("Not saved")
-                      
+
+              
                 elif choice == 3:
                     # Filter out old tickets (tickets with a date greater than or equal to today)
-                   
                     today_date = datetime.datetime.today().date()
                     today = datetime.datetime.today()
                     print("\nToday's Tickets:")
@@ -158,37 +233,60 @@ def adminMenu(tickets): #O(n), where n is the number of user interactions.
                             print(f"Username: {ticket['username']}")
                             print(f"Event Date: {ticket['timestamp'].strftime('%Y%m%d')}")
                             print(f"Priority: {ticket['priority']}\n")
-                      
+
+              
                 elif choice == 4:
                     ticket_id = input("Enter the ticket ID: ")
-                    priority = int(input("Enter the new priority: "))
-                
-                    ticket_found = False
-                    for ticket in tickets:
-                        if ticket['ticket_id'] == ticket_id:
-                            ticket['priority'] = priority
-                            ticket_found = True
-                            print(f"Priority for Ticket ID {ticket_id} changed to {priority}.")
-                            break
-                
-                    if not ticket_found:
+                    if checkForTicket(tickets, ticket_id):
+                        priority = int(input("Enter the new priority: "))
+                        for ticket in tickets:
+                            if ticket['ticket_id'] == ticket_id:
+                                ticket['priority'] = priority
+                                print(f"Priority for Ticket ID {ticket_id} changed to {priority}.")
+                                save = input("Do you wish to save? (write y if yes n for no)")
+                                if save.lower() == "y":
+                                    saveTickets("tickets.txt", tickets)  # Save tickets before exiting
+                                    print("saving...")
+                                elif save.lower() == "n":
+                                    print("Not saved")
+                                break
+                    else:
                         print(f"Ticket ID {ticket_id} not found.")
-                    save = input("Do you wish to save? (write y if yes n for no)")
-                    if save == "y":
-                       saveTickets("tickets.txt", tickets)  # Save tickets before exiting
-                       print("saving...")
-                    elif save == "n":
-                      print("Not saved")
+              
+
+              
                 elif choice == 5:
-                    pass
+                    ticket_id = input("Enter the ticket ID: ")
+                    if removeTicket(tickets, ticket_id):
+                        save = input("Do you wish to save? (write y if yes n for no)")
+                        if save.lower() == "y":
+                            saveTickets("tickets.txt", tickets)  # Save tickets before exiting
+                            print("saving...")
+                        elif save.lower() == "n":
+                            print("Not saved")
+                    else:
+                        print(f"Ticket ID {ticket_id} not found.")
+
+              
                 elif choice == 6:
-                    pass
+                    tickets = displayAndRemove(tickets)
+                    save = input("Do you wish to save? (write y if yes n for no)")
+                    if save.lower() == "y":
+                        saveTickets("tickets.txt", tickets)  # Save tickets before exiting
+                        print("saving...")
+                    elif save.lower() == "n":
+                        print("Not saved")
+
+
+              
                 elif choice == 7:
                     print("Exiting Program...")
-                    return False
+                    
                 else:
                     print("Invalid choice. Please try again.")
 
+
+      
         else:
             print("Incorrect Username and/or Password.")
             attempts += 1
@@ -196,10 +294,11 @@ def adminMenu(tickets): #O(n), where n is the number of user interactions.
     print("Maximum login attempts reached, exiting Program...")
     return False
 
+
+# Main function the first to be executed 
 def main():
     file_path = "tickets.txt"
     tickets = readTickets(file_path)
-
     choice = input("User Type Admin or User: ").lower()
 
     if choice == "admin":
