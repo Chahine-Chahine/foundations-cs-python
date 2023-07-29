@@ -1,5 +1,7 @@
 import datetime
 
+
+#For datetime module i used w3schools recource:https://www.w3schools.com/python/python_datetime.asp
 # Function to read tickets from the file and store them in a list of dictionaries
 def readTickets(file_path): #worst case =>O(n), where n is the number of lines in the file
     tickets = []
@@ -24,13 +26,16 @@ def saveTickets(file_path, tickets):# O(n), where n is the number of tickets
     with open(file_path, 'w') as file: #'w', is the mode for writing while 'r' is for reading
         for ticket in tickets:
             file.write(f"{ticket['ticket_id']}, {ticket['event_id']}, {ticket['username']}, {ticket['timestamp'].strftime('%Y%m%d')}, {ticket['priority']}\n")
-
+# formatted string literals or fstring is a great way of writing strings with variables, I used it heavely in my assignments and here where i found about it, the official docs:
+#https://docs.python.org/3/tutorial/inputoutput.html
 
 
 # Function to add a new ticket to the system
 def addTicket(tickets, event_id, username, current_date): #O(1)
     ticket_id = f"tick{str(len(tickets) + 1).zfill(3)}"
     # Convert the current_date to a datetime object
+    # zfull() is a string method that dds zeros at the beginning of the string, until it reaches         the specified length link:
+    #https://www.w3schools.com/python/trypython.asp?filename=demo_ref_string_zfill
     current_date = datetime.datetime.strptime(current_date, '%Y%m%d')
     new_ticket = {
         'ticket_id': ticket_id,
@@ -64,7 +69,7 @@ def adminAddTicket(tickets, event_id, username, current_date, priority):# O(1)
 #remove ticket form the list tickets through ticket_id
 #The remove() method removes the first matching element (which is passed as an argument) from the list
 #https://www.programiz.com/python-programming/methods/list/remove
-def removeTicket(tickets, ticket_id):
+def removeTicket(tickets, ticket_id): #O(n), where n is the number of tickets
     for ticket in tickets:
         if ticket['ticket_id'] == ticket_id:
             tickets.remove(ticket)
@@ -105,7 +110,7 @@ def insertionSort(tickets): #O(n^2), where n is the number of tickets
 
 
 # Function that checks if a ticket exists and returns a boolean either true or false
-def checkForTicket(tickets, ticket_id):
+def checkForTicket(tickets, ticket_id): # O(n), where n is the number of tickets
     for ticket in tickets:
         if ticket['ticket_id'] == ticket_id:
             return True
@@ -113,12 +118,12 @@ def checkForTicket(tickets, ticket_id):
     return False
 
 # Function that gets the priority
-def getPriority(ticket):
+def getPriority(ticket): #O(1)
     return ticket['priority']
 
 
 # Function that display then remove the events of today's date
-def displayAndRemove(tickets):
+def displayAndRemove(tickets): #O(n), where n is the number of tickets
     today_date = datetime.datetime.today().date()
     today_events = []
 
@@ -129,6 +134,9 @@ def displayAndRemove(tickets):
     if not today_events:
         print("No events found today.")
     else:
+      #https://docs.python.org/3/library/stdtypes.html#list.sort
+    # key by defualt is none, we pass the function getPriority as a key argument
+# The sort method will then call getPriority for each element in today_events, and the return value
         today_events.sort(key=getPriority)
         print("\nToday's Events Sorted by Priority:")
         for event in today_events:
