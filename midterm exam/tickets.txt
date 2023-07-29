@@ -5,6 +5,8 @@ tick004, ev003, Ali, 20230728, 0
 tick005, ev002, Mohammad, 20230728, 0
 tick006, ev006, fatima, 20230728, 0
 tick007, ev008, husam, 20230729, 0
-tick008, ev002, charbel, 20230729, 0
+tick008, ev002, charbel, 20230729, 3
 tick009, ev008, ahmad, 20190209, 6
 tick010, ev008, lilian, 20230729, 0
+tick011, ev006, mohannad, 20230729, 0
+tick012, ev002, perla, 20230908, 7

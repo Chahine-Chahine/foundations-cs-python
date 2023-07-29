@@ -138,8 +138,17 @@ def adminMenu(tickets): #O(n), where n is the number of user interactions.
                       
                 elif choice == 3:
                     # Filter out old tickets (tickets with a date greater than or equal to today)
+                   
+                    today_date = datetime.datetime.today().date()
                     today = datetime.datetime.today()
-#I need to fix tomorrow today's tickets are not showing
+                    print("\nToday's Tickets:")
+                    for ticket in tickets:
+                        if ticket['timestamp'].date() == today_date:  # Compare only the date part
+                            print(f"Ticket ID: {ticket['ticket_id']}")
+                            print(f"Event ID: {ticket['event_id']}")
+                            print(f"Username: {ticket['username']}")
+                            print(f"Event Date: {ticket['timestamp'].strftime('%Y%m%d')}")
+                            print(f"Priority: {ticket['priority']}\n")
                     # Display the sorted tickets
                     print("\nUpcoming Tickets:")
                     for ticket in tickets:
@@ -147,11 +156,29 @@ def adminMenu(tickets): #O(n), where n is the number of user interactions.
                             print(f"Ticket ID: {ticket['ticket_id']}")
                             print(f"Event ID: {ticket['event_id']}")
                             print(f"Username: {ticket['username']}")
-                            print(f"Event Date: {ticket['timestamp'].strftime('%Y-%m-%d')}")
+                            print(f"Event Date: {ticket['timestamp'].strftime('%Y%m%d')}")
                             print(f"Priority: {ticket['priority']}\n")
                       
                 elif choice == 4:
-                    pass
+                    ticket_id = input("Enter the ticket ID: ")
+                    priority = int(input("Enter the new priority: "))
+                
+                    ticket_found = False
+                    for ticket in tickets:
+                        if ticket['ticket_id'] == ticket_id:
+                            ticket['priority'] = priority
+                            ticket_found = True
+                            print(f"Priority for Ticket ID {ticket_id} changed to {priority}.")
+                            break
+                
+                    if not ticket_found:
+                        print(f"Ticket ID {ticket_id} not found.")
+                    save = input("Do you wish to save? (write y if yes n for no)")
+                    if save == "y":
+                       saveTickets("tickets.txt", tickets)  # Save tickets before exiting
+                       print("saving...")
+                    elif save == "n":
+                      print("Not saved")
                 elif choice == 5:
                     pass
                 elif choice == 6:
