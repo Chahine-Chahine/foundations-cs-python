@@ -5,6 +5,8 @@ import datetime
 # Function to read tickets from the file and store them in a list of dictionaries
 def readTickets(file_path): #worst case =>O(n), where n is the number of lines in the file
     tickets = []
+  #A great resource for reading from a file is https://web.stanford.edu/class/archive/cs/cs106a/cs106a.1204/handouts/py-file.html
+  #Using with will set us free from writing file.close() the with open(...) form automates closing the file reference when the code is done using it
     with open(file_path, 'r') as file:
         for line in file:
             ticket_info = line.strip().split(', ')
@@ -26,6 +28,7 @@ def saveTickets(file_path, tickets):# O(n), where n is the number of tickets
     with open(file_path, 'w') as file: #'w', is the mode for writing while 'r' is for reading
         for ticket in tickets:
             file.write(f"{ticket['ticket_id']}, {ticket['event_id']}, {ticket['username']}, {ticket['timestamp'].strftime('%Y%m%d')}, {ticket['priority']}\n")
+#strftime format a datetime object into a string with a specific format
 # formatted string literals or fstring is a great way of writing strings with variables, I used it heavely in my assignments and here where i found about it, the official docs:
 #https://docs.python.org/3/tutorial/inputoutput.html
 
@@ -34,9 +37,10 @@ def saveTickets(file_path, tickets):# O(n), where n is the number of tickets
 def addTicket(tickets, event_id, username, current_date): #O(1)
     ticket_id = f"tick{str(len(tickets) + 1).zfill(3)}"
     # Convert the current_date to a datetime object
-    # zfull() is a string method that dds zeros at the beginning of the string, until it reaches         the specified length link:
+    # zfill() is a string method that dds zeros at the beginning of the string, until it reaches         the specified length link:
     #https://www.w3schools.com/python/trypython.asp?filename=demo_ref_string_zfill
     current_date = datetime.datetime.strptime(current_date, '%Y%m%d')
+  # strptime convert a date string to a datetime object
     new_ticket = {
         'ticket_id': ticket_id,
         'event_id': event_id,
@@ -180,8 +184,8 @@ def userMenu(tickets): #O(n), where n is the number of user interactions.
 def adminMenu(tickets): #O(n), where n is the number of user interactions.
     attempts = 0
     while attempts < 5:
-        username = input("Username: ")
-        password = input("Password: ")
+        username = input("Username: ").strip() #Username is not space sensetive 
+        password = input("Password: ") #Password will consider a space as a character 
 
         if username == "admin" and password == "admin123123":
             print("Welcome admin")
